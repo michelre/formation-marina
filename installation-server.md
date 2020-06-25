@@ -50,7 +50,7 @@ cp bin/npx /usr/local/bin
 
 ## Principe de déploiment d'une application Node.js
 
-[!https://imgur.com/8OMZg2Q.png](https://imgur.com/8OMZg2Q.png)
+[![](https://imgur.com/8OMZg2Q.png)]()
 
 ## Penser à la sécurité
 La sécurité est fondamentale lors de l'administration d'un serveur. Voici quelques règles élémentaires:
