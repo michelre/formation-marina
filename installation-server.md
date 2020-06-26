@@ -48,9 +48,13 @@ cp bin/npm /usr/local/bin
 cp bin/npx /usr/local/bin
 ```
 
-## Principe de déploiment d'une application Node.js
+## Principe de fonctionnement d'une application Node.js
 
 [![](https://imgur.com/8OMZg2Q.png)]()
+
+Ce n'est pas l'application Node qui répond directement. En fait, on passe par un système de proxy,
+assuré par un serveur web (Nginx ou apache) qui est en charge d'intercepter les 
+requêtes des utilisateurs et les "router" vers l'application node
 
 ## Penser à la sécurité
 La sécurité est fondamentale lors de l'administration d'un serveur. Voici quelques règles élémentaires:
