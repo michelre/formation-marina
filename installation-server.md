@@ -30,6 +30,7 @@ Créer un utilisateur pour ne pas se connecter en temps que root.
 -   ssh marina@51.30.48.139
 
 Donner les droits au nouvel utilisateur :
+TODO completer
 
 ### Etape 3
 
@@ -72,3 +73,16 @@ La sécurité est fondamentale lors de l'administration d'un serveur. Voici quel
 -   Ne pas permettre l'authentification avec le login / mot de passe en ssh à moins d'avoir un mot de passe assez fort. Préférer l'utilisation d'une clé ssh, qu'on envoie sur le serveur avec la commande `ssh-copy-id <user>@<ip_serveur>`
 -   Autre possibilité, ne pas permettre l'accès ssh à d'autres utilisateurs que ceux qu'on sélectionne.
 -   Pour toute ces options, consulter le fichier `/etc/ssh/sshd_config`
+
+## installer certbot
+
+[https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
+
+## installer un projet
+
+-   créer un sous-domaine dans la zone DNS
+-   cloner le projet dans /data
+-   ajouter un fichier dans /etc/nginx/sites-available/ pour lier le dossier de travail au domaine
+-   créer un lien symbolique vers sites enable : ln -s source destination : ln -s /etc/nginx/sites-available /etc/nginx/sites-enable/
+-   redemmarer les services : sudo service nginx restart
+-   générer le certifica ssl avec certbot : sudo certbot --nginx
