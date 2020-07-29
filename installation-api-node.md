@@ -1,63 +1,33 @@
-# Guide d'installation d'un serveur
+# Guide d'installation d'une API node
 
-## Installation générale
+## Idée générale
 
-### Etape 1
-Côté OVH, il faut demander l'installation d'un VPS (Virtual Private Server)
-Le fonctionnement reste identique à un serveur dédié mais ne nécessite pas d'installation
-physique chez l'hébergeur. Il en existe de différente puissance, capacité: https://www.ovhcloud.com/fr/vps/
+L'idée est d'utiliser Nginx en tant que reverse proxy. Ce n'est plus Nginx qui est en charge de servir les ressources 
+mais il s'occupe juste de réaliser la passerelle vers une application node existante
 
-**Conseil: Prendre le plus petit dans un premier temps quite à augmenter sa capacité dans le temps**
+On ne sert jamais une application node sur le port 80 (http) ou 443 (https) mais plutôt sur un port 3000
+Nginx cependant écoute sur le port 80 ou 443 et redirige les requêtes des utilisateurs vers le port 3000 de l'application Node
 
-**Préférer l'utilisation d'Ubuntu dans sa dernière version, question demandée par OVH lors de l'installation** 
+## Installation
 
-### Etape 2
-L'installation est rapide du côté OVH et envoi un mail une fois l'installation terminée. Ce mail contient
-les informations de connexion pour l'utilisateur root avec le mot de passe associé ainsi que l'adresse IP du serveur (ex: 51.30.48.139)
-On peut donc se connecter en ssh sur le serveur avec ces identifiants afin d'y installer nos applications:
+* Lancer l'application Node sur le port 3000 de manière infinie, par exemple avec forever https://www.npmjs.com/package/forever
+
+* Ajouter un nouveau site dans le répertoire site-availables de nginx qui contient la configuration suivante:
 
 ```
-ssh root@51.30.48.139
+server {
+    listen 80;
+    server_name api.marinafront.fr;
+
+    location / {
+        proxy_set_header   X-Forwarded-For $remote_addr;
+        proxy_set_header   Host $http_host;
+        proxy_pass         http://localhost:3000;
+    }
+}
 ```
+Il convient de changer `api.marinafront.fr` par la bonne URL de l'API
 
-### Etape 3
-Nous pouvons désormais installer nos différents programmes afin de faire fonctionner nos différentes applications, à savoir:
-
-* Nginx / Apache: Serveurs web permettant de servir nos ressources (fichiers, applications...)
-* MySQL, Mongo...: Serveurs de base de données
-* PHP, Node, Java: Langages permettant de faire fonctionner nos applications
-
-Pour installer nos packages, on utilise le package manager du système d'exploitation. Attention, celui-ci
-change en fonction du système. Une machine installée avec debian n'aura pas le même package manager qu'une machine Ubuntu
-
-Sous Ubuntu, on utilise le package manager **apt**. Une multitude de commandes existent mais nous allons en utiliser qu'une petite partie:
-
-* `apt-get install <package>` permet d'installer un package
-* `apt-cache search <pacakge>` permet de rechercher un package
-* `apt-get update` permet de mettre à jour nos packages 
-
-Pour l'installation de node, préférer le téléchargement du binaire directement sur le site officiel: https://nodejs.org/en/download/
-Exécuter les commandes suivantes:
-```
-cd /tmp
-wget https://nodejs.org/dist/v12.18.1/node-v12.18.1-linux-x64.tar.xz
-tar xvf node-v12.18.1-linux-x64.tar.xz
-cd node-v12.18.1-linux-x64
-cp bin/node /usr/local/bin
-cp bin/npm /usr/local/bin
-cp bin/npx /usr/local/bin
-```
-
-## Principe de fonctionnement d'une application Node.js
-
-[![](https://imgur.com/8OMZg2Q.png)]()
-
-Ce n'est pas l'application Node qui répond directement. En fait, on passe par un système de proxy,
-assuré par un serveur web (Nginx ou apache) qui est en charge d'intercepter les 
-requêtes des utilisateurs et les "router" vers l'application node
-
-## Penser à la sécurité
-La sécurité est fondamentale lors de l'administration d'un serveur. Voici quelques règles élémentaires:
-* Ne pas permettre l'authentification avec le login / mot de passe en ssh à moins d'avoir un mot de passe assez fort. Préférer l'utilisation d'une clé ssh, qu'on envoie sur le serveur avec la commande `ssh-copy-id <user>@<ip_serveur>`
-* Autre possibilité, ne pas permettre l'accès ssh à d'autres utilisateurs que ceux qu'on sélectionne.
-* Pour toute ces options, consulter le fichier `/etc/ssh/sshd_config`
+* Générer les certificats SSL avec Certbot
+* Créer un lien symbolique dans les sites-enabled
+* Redémarrer Nginx: `sudo service nginx restart`
