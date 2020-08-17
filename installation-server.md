@@ -82,7 +82,7 @@ La sécurité est fondamentale lors de l'administration d'un serveur. Voici quel
 
 -   créer un sous-domaine dans la zone DNS
 -   cloner le projet dans /data
--   ajouter un fichier dans /etc/nginx/sites-available/ pour lier le dossier de travail au domaine
--   créer un lien symbolique vers sites enable : ln -s source destination : ln -s /etc/nginx/sites-available /etc/nginx/sites-enable/
+-   ajouter un fichier dans /etc/nginx/sites-available/ pour lier le dossier de travail au domaine : sudo cp "nom du fichier à copier" "nom du nouveau ficher"
+-   créer un lien symbolique vers sites enable : ln -s source destination : ln -s /etc/nginx/sites-available/... /etc/nginx/sites-enable/...
 -   redemmarer les services : sudo service nginx restart
 -   générer le certifica ssl avec certbot : sudo certbot --nginx
