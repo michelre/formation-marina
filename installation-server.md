@@ -67,7 +67,7 @@ cp bin/npx /usr/local/bin
 [![](https://imgur.com/8OMZg2Q.png)]()
 
 Ce n'est pas l'application Node qui répond directement. En fait, on passe par un système de proxy,
-assuré par un serveur web (Nginx ou apache) qui est en charge d'intercepter les 
+assuré par un serveur web (Nginx ou apache) qui est en charge d'intercepter les
 requêtes des utilisateurs et les "router" vers l'application node
 
 ## Penser à la sécurité
@@ -87,6 +87,6 @@ La sécurité est fondamentale lors de l'administration d'un serveur. Voici quel
 -   créer un sous-domaine dans la zone DNS
 -   cloner le projet dans /data
 -   ajouter un fichier dans /etc/nginx/sites-available/ pour lier le dossier de travail au domaine : sudo cp "nom du fichier à copier" "nom du nouveau ficher"
--   créer un lien symbolique vers sites enable : ln -s source destination : ln -s /etc/nginx/sites-available/... /etc/nginx/sites-enable/...
+-   créer un lien symbolique vers sites enabled : ln -s source destination : ln -s /etc/nginx/sites-available/... /etc/nginx/sites-enabled/...
 -   redemmarer les services : sudo service nginx restart
--   générer le certifica ssl avec certbot : sudo certbot --nginx
+-   générer les certificats ssl avec certbot : sudo certbot --nginx
